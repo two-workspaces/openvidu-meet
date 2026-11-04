@@ -7,8 +7,9 @@
 # bridge 7881 onto it. The bridge dials the container's own address, not 127.0.0.1:
 # pion's TCP mux looks connections up by local IP and would drop a loopback one.
 set -eu
+# Named MEDIA_REDIS_*: LiveKit reads REDIS_HOST as a flag that overrides this config and drops the port.
 
-: "${LIVEKIT_API_KEY:?}" "${LIVEKIT_API_SECRET:?}" "${REDIS_HOST:?}" "${REDIS_PASSWORD:?}" "${MEET_WEBHOOK_URL:?}"
+: "${LIVEKIT_API_KEY:?}" "${LIVEKIT_API_SECRET:?}" "${MEDIA_REDIS_HOST:?}" "${MEDIA_REDIS_PASSWORD:?}" "${MEET_WEBHOOK_URL:?}"
 if [ -z "${RAILWAY_TCP_PROXY_DOMAIN:-}" ] || [ -z "${RAILWAY_TCP_PROXY_PORT:-}" ]; then
   echo "FATAL: no TCP proxy on this service. Calls would connect and carry no media." >&2
   echo "Add one on port 7881 in Settings > Networking, then redeploy." >&2
@@ -36,8 +37,8 @@ rtc:
 turn:
   enabled: false
 redis:
-  address: "${REDIS_HOST}:${REDIS_PORT:-6379}"
-  password: "${REDIS_PASSWORD}"
+  address: "${MEDIA_REDIS_HOST}:${MEDIA_REDIS_PORT:-6379}"
+  password: "${MEDIA_REDIS_PASSWORD}"
 keys:
   "${LIVEKIT_API_KEY}": "${LIVEKIT_API_SECRET}"
 webhook:
