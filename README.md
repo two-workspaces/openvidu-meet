@@ -40,7 +40,7 @@ Five services and a bucket. **Meet** is the app and API. **LiveKit** carries the
 2. Open the **Meet** service's domain and sign in as `admin`. The password is `MEET_INITIAL_ADMIN_PASSWORD` in the Meet service's Variables. Your REST API key is `MEET_INITIAL_API_KEY`, sent as the `X-API-KEY` header.
 3. Create a room and share its link. Moderator and speaker links are separate.
 
-The admin password and API key are only read on the first start. Changing them later in Variables has no effect, so change the password in the Meet console.
+The admin password and API key are only read on the first start. Changing them later in Variables has no effect. Change the password under **My profile** in the Meet console.
 
 **Recording.** Egress runs a headless browser to compose the video. Recording a four-person call at 720p used about 0.6 CPU cores and 330 MB of memory, on top of what it uses at idle, and ran fine with each service limited to 1 GB. A recording only uses this while it's running. If you don't need recording, you can remove the Egress service.
 
