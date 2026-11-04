@@ -1,5 +1,5 @@
 #!/bin/sh
-# OpenVidu (LiveKit-compatible) media server on Railway.
+# LiveKit media server for OpenVidu Meet on Railway.
 #
 # Railway routes no inbound UDP, so media uses ICE over one TCP proxy. The server
 # advertises the port it binds, while the proxy maps a random public port onto
@@ -23,9 +23,6 @@ SELF_IP=$(ip -4 -o addr show scope global | awk '{print $4}' | cut -d/ -f1 | hea
 
 umask 077
 cat > /tmp/livekit.yaml <<YAML
-openvidu:
-  analytics:
-    enabled: false
 port: ${PORT:-7880}
 bind_addresses:
   - ""
