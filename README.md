@@ -13,7 +13,7 @@ Five services and a bucket. **Meet** is the app and API. **LiveKit** carries the
 - **Nothing is open to strangers.** The admin password and API key are generated for your deploy, and creating rooms requires one of them.
 - **Sized for a small team.** All five services together use about 410 MB at idle.
 
-**What to expect from TCP.** It's fine for small meetings on normal connections. On a poor connection a lost packet holds up everything behind it, so video stutters more than it would over UDP. A two-person test call ran at 720p with no lost packets, but larger meetings haven't been tested. Networks that only allow ports 80 and 443 can't connect, because the media port is a high-numbered one chosen by Railway. Some corporate and guest networks are like this.
+**What to expect from TCP.** It suits small meetings on normal connections. In testing, a two-person call ran at 720p and a four-person call at 360p per tile, both with no lost packets, on one good connection. Larger meetings and poor connections haven't been tested. On a poor connection a lost packet holds up everything behind it, so video stutters more than it would over UDP. Networks that only allow ports 80 and 443 can't connect, because the media port is a high-numbered one chosen by Railway. Some corporate and guest networks are like this.
 
 ## Common Use Cases
 
@@ -42,13 +42,13 @@ Five services and a bucket. **Meet** is the app and API. **LiveKit** carries the
 
 The admin password and API key are only read on the first start. Changing them later in Variables has no effect, so change the password in the Meet console.
 
-**Recording.** Egress runs a headless browser to compose the video and uses roughly one or two CPU cores per recording, which your Railway plan bills as usage. It handles one recording at a time comfortably on small plans. If you don't need recording, you can remove the Egress service.
+**Recording.** Egress runs a headless browser to compose the video. Recording a four-person call at 720p used about 0.6 CPU cores and 330 MB of memory, on top of what it uses at idle, and ran fine with each service limited to 1 GB. A recording only uses this while it's running. If you don't need recording, you can remove the Egress service.
 
 **Bandwidth.** Every participant sends and receives through Railway, and video adds up fast. Railway bills outbound traffic, so check your usage after your first real meetings.
 
 **Custom domains.** After adding one to Meet, update `MEET_BASE_URL`. After adding one to LiveKit, update `LIVEKIT_URL` on Meet and `LIVEKIT_WS_URL` on Egress. Media keeps using the TCP proxy either way.
 
-**Not included.** Phone dial-in (SIP) and streaming in from OBS (RTMP ingest), since both need ports Railway can't offer. LiveKit's built-in TURN is also off, because it would have to run on the same TCP route anyway.
+**Not included.** Phone dial-in (SIP), which needs UDP, and streaming in from OBS, which needs a separate ingest service. LiveKit's built-in TURN is also off, because it would have to run over the same TCP route anyway.
 
 **Keep the TCP proxy.** Removing LiveKit's TCP proxy stops all calls. LiveKit reads the proxy's address and port each time it starts, so restart LiveKit if Railway ever changes them.
 
